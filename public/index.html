@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ludus.com</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      #cardHover{
+        transition: ease all 1s;
+      }
+      #cardHover:hover{
+        box-shadow: 1px 1px 1px 1px ;
+        cursor: pointer;
+        transform: scale(1.1);
+        transition: ease all 1s;
+      }
+      #icon:hover{
+        cursor: pointer;
+        background-color: lightgray;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function(){
+        // for sign up
+        $("#signupbtn").click(function(){
+          let email=$("#txtEmail").val();
+          let pwd=$("#txtPwd").val();
+          let type=$("#utype").val();
+          let obj={
+            type:"get",
+            url:"/signup",
+            data:{
+              txtEmail:email,
+              txtPwd:pwd,
+              utype:type
+            }
+          }
+          $.ajax(obj).done(function(response){
+            alert(response);
+          }).fail(function(err){
+            alert("server error");
+          })
+        })
+        // for login 
+        $("#loginbtn").click(function(){
+          let email=$("#txtEmaillog").val();
+          let pwd=$("#txtPwdlog").val();
+          let resp="";
+          let obj={
+            type:"get",
+            url:"/login",
+            data:{
+            txtEmaillog:email,
+            txtPwdlog:pwd
+            }
+          }
+            $.ajax(obj).done(function(response){
+              // alert(response);
+              resp=response;
+              if(resp=="Host")
+            {
+              localStorage.setItem("activeUser",email);
+              location.href="dash_organizer.html";
+            }
+            else if(resp=="Player")
+            {
+              localStorage.setItem("activeUser",email);
+              location.href="dash_player.html";
+            }
+            else
+            {
+              alert("invalid credentials");
+            }
+            }).fail(function(err){
+              alert("server error");
+            })    
+        })
+        // duplicate email chk
+        // $("#txtEmail").blur(function(){
+        //   let email=$(this).val();
+        //   let obj={
+        //     type:"get",
+        //     url:"/chk-user",
+        //     data:{
+        //       txtEmail:email
+        //     }
+        //   }
+        //   $.ajax(obj).done(function(response){
+        //     alert(response);
+        //   }).fail(function(err){
+        //     alert(err.message);
+        //   })
+        // })
+        $("#txtEmaillog").keydown(function(){
+          let exp=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          let email=$(this).val();
+          let res=exp.test(email);
+          if(res==true)
+          {
+            $("#validlog").addClass("alert-success").removeClass("alert-danger");
+            $("#validlog").html("valid email");
+          }
+          else
+          {
+            $("#validlog").addClass("alert-danger").removeClass("alert-success");
+            $("#validlog").html("invalid email");
+          }
+
+        })
+        $("#txtEmail").keydown(function(){
+          let exp=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          let email=$(this).val();
+          let res=exp.test(email);
+          if(res==true)
+          {
+            $("#validsignup").addClass("alert-success").removeClass("alert-danger");
+            $("#validsignup").html("valid email");
+          }
+          else
+          {
+            $("#validsignup").addClass("alert-danger").removeClass("alert-success");
+            $("#validsignup").html("invalid email");
+          }
+          
+      })
+      })
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="row" class="bar">
+        <div class="col-md-12">
+            <nav class="navbar navbar-expand-lg bg-body">
+                <div class="container-fluid">
+                  <a class="navbar-brand">
+                    <img src="pics/logo.jpg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                    ludus
+                  </a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#"></a>
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Our Services
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="#navservices">Publish</a></li>
+                          <li><a class="dropdown-item" href="#navservices">Participate</a></li>
+                          <li><a class="dropdown-item" href="#navservices">Win</a></li>
+                          <li><a class="dropdown-item" href="#navservices">Certification</a></li>
+                        </ul>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#team">About Us</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#contact">Contact Us</a>
+                      </li>
+                    </ul>
+                  <form class="d-flex" role="search">
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#signupModal" style="margin-right: 10px;" >
+                        SignUp
+                      </button>
+                      <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        Login
+                      </button>
+                  </form>
+                  </div>
+                </div>
+              </nav>
+        </div>
+  <!-- sign up Modal -->
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">SignUp</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            
+            <span style="font-size: larger;">EmailId</span> <br>
+          <input type="text" style="width: 300px;" id="txtEmail" class="form-control"><br>
+          <div class="alert alert-danger" role="alert" id="validsignup" style="width: 300px;">
+          </div>
+          <span style="font-size: larger;">Password</span>
+          <br>
+          <input type="password" style="width: 300px;" id="txtPwd" class="form-control"><br><br>
+          <span style="font-size: larger;">User Type</span><br>
+          <select class="form-select" name="" id="utype" style="width: 150px;">
+            <option value="" disabled>Select</option>
+            <option value="Player">Player</option>
+            <option value="Host">Host</option>
+          </select>
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" style="margin-right: 200px;" id="signupbtn" >SignUp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <!--login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Welcome Back</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <span style="font-size: larger;">EmailId</span> <br>
+            <input type="text" style="width: 300px;" id="txtEmaillog" class="form-control" ><br>
+            <div class="alert alert-danger" role="alert" id="validlog" style="width: 300px;">
+            </div>
+            <span style="font-size: larger;">Password</span>
+            <br>
+            <input type="password" style="width: 300px;" id="txtPwdlog" class="form-control"><br><br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" style="margin-right: 200px;" id="loginbtn"  >Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+
+    <div class="container" style="width: 150rem;">
+    <div class="rows">
+      <div class="col-md-12">
+        <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="5000">
+              <img src="pics/indeximg1.jpg" class="d-block w-100" alt="..." style="height: 800px;">
+            </div>
+            <div class="carousel-item" data-bs-interval="5000">
+              <img src="pics/indeximg2.jpg" class="d-block w-100" alt="..." style="height: 800px;">
+            </div>
+            <div class="carousel-item" data-bs-interval="5000">
+              <img src="pics/indeximg3.jpg" class="d-block w-100" alt="..." style="height: 800px;">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container" style=" margin-top: 30px;">
+    <div class="row">
+      <div class="col-md-12">
+        <center><h1>Enter The World Of Sports With Bang....<i class="fa-solid fa-hand-fist"></i></h1></center>
+        <center><h4>Get Some Edge Over Your Opponents With Experience</h4></center>
+        <center><h5>See You At Arena</h5></center>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 50px;">
+    <div class="col-md-12">
+      <nav class="bg-body">
+        <center>
+        <div class="container-fluid" style="font-size: larger;font-family: comic sans ms;" id="navservices">
+          <a class="navbar-brand">Our Services</a>
+        </div>
+      </center>
+      </nav>
+    </div>
+  </div>
+  <div class="container">
+  <div class="row" style="margin-top: 40px;">
+    <div class="col-md-3" id="publish">
+      <div class="card" style="width: 18rem;" id="cardHover">
+        <img src="pics/servicepublish.jpg" class="card-img-top" alt="..." style="height: 200px;">
+        <div class="card-body">
+          <center><p class="card-text">Organisations/Hosts can <b>Publish</b> about their tournaments</p></center>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" id="participate">
+      <div class="card" style="width: 18rem;" id="cardHover">
+        <img src="pics/servicesearch.jpg" class="card-img-top" alt="..." style="height: 200px;">
+        <div class="card-body">
+          <center><p class="card-text">Players <b>Find</b> about tournaments being held near them</p></center>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" id="prizes">
+      <div class="card " style="width: 18rem;" id="cardHover">
+        <img src="pics/serviceprizes.jpg" class="card-img-top" alt="..." style="height: 200px;">
+        <div class="card-body">
+          <center><p class="card-text">chance to <b>Win</b> exciting Prizes or some scholarship</p></center>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" id="certification">
+      <div class="card " style="width: 18rem;" id="cardHover">
+        <img src="pics/servicecertification.jpg" class="card-img-top" alt="..." style="height: 200px;">
+        <div class="card-body">
+          <center><p class="card-text">Get some <b>Certificate</b> to boost your profile</p></center>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" style="margin-top: 50px; margin-bottom: 20px;">
+  <div class="col-md-12">
+    <nav class="bg-body">
+      <center>
+      <div class="container-fluid" style="font-size: larger;font-family: comic sans ms;">
+        <a class="navbar-brand" id="team">Our Team</a>
+      </div>
+    </center>
+    </nav>
+  </div>
+</div>
+<div class="container">
+<div class="row">
+  <div class="col-md-6">
+    <div class="card" style="width: 18rem;" id="cardHover">
+      <img src="pics/Sirimg.png" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Mentor</h5>
+        <p class="card-text">Developed Under The Guidence of Author Of Real Java-Mr. Rajesh Bansal CEO/Founder Of Banglore Computor Education Bathinda</p>
+        <a href="https://realjavaonline.com/" class="btn btn-primary" target="_blank">Click To Know More</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card" style="width: 18rem;" id="cardHover">
+      <img src="pics/DEVELOPERpic.jpeg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Developer</h5>
+        <p class="card-text">Developed By Raghav Gupta B.tech-CSE Student at MNNIT ALLAHABAD. JEE-MAINS:- AIR 2795 JEE-ADV:-AIR 7406</p>
+        <a href="https://www.instagram.com/raghav_gupta2006/" class="btn btn-primary" target="_blank">Click For More Info</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="row" style="margin-top: 50px; margin-bottom: 20px;">
+  <div class="col-md-12">
+    <nav class="bg-body">
+      <center>
+      <div class="container-fluid" style="font-size: larger;font-family: comic sans ms;">
+        <a class="navbar-brand" id="contact">Contact Us</a>
+      </div>
+    </center>
+    </nav>
+  </div>
+</div>
+<div class="row">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3601.3487866377086!2d81.86016417608924!3d25.493411777521594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399aca78818ddc51%3A0x6690dd2de3a1415b!2sMotilal%20Nehru%20National%20Institute%20of%20Technology%2C%20Allahabad!5e0!3m2!1sen!2sin!4v1731845532874!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+<div class="container" style="margin-top: 20px;">
+  <div class="row">
+    <div class="col-md-12">
+      <div>HQ:-MNNIT ALLAHABAD,UTTAR PRADESH,INDIA</div>
+      <div>Postal Address:-MNNIT ALLAHABAD SVBH BOYS HOSTEL ROOM.NO:-102,UTTAR PRADESH,INDIA</div>
+      <div>Email:-</div>
+      <div>Contact No:-9878337737</div>
+    </div>
+  </div>
+</div>
+<div style="font-size: large; margin-left: 50px;">
+  Follow Ludus <a style="color: black;" href=""><i class="fa-brands fa-facebook-f" style="margin-left: 20px;" id="icon"></i></a> <a style="color: black;" href=""><i class="fa-brands fa-x-twitter" id="icon" style="margin-left: 20px;" href=""></i></a>  <a style="color: black;" href="https://www.instagram.com/ludus.sport.official/" target="_blank"><i class="fa-brands fa-instagram" id="icon" style="margin-left: 20px;"></i></a>
+</div>
+  <div class="row" style="background-color: lightgray; margin-top: 0px;">
+    <hr>
+    <div class="container">
+      <center>
+        This project Is Developed To Help People Around The Globol and Spread Awareness About Upcoming Sports Events... <br>
+        Developed In Intrest Of Public Wellfare... <i class="fa-solid fa-hand-holding-heart" style="margin-left: 5px; margin-right: 5px;"></i><br>
+        Launched In 2024
+        <div>Copy Right Reserved<i class="fa-solid fa-copyright" style="margin-left: 5px;"></i> Since 2024</div>
+        Technologies Used For development: <br>
+        FrontEnd:-HTML<i class="fa-brands fa-html5" style="margin-left: 5px; margin-right: 5px;"></i>/CSS<i class="fa-brands fa-css3-alt" style="margin-left: 5px; margin-right: 5px;"></i>/JavaScript<i class="fa-brands fa-js" style="margin-left: 5px; margin-right: 5px;"></i>/AngularJS<i class="fa-brands fa-angular" style="margin-left: 5px; margin-right: 5px;"></i>/JQuery/Bootstrap<i class="fa-brands fa-bootstrap " style="margin-left: 5px; margin-right: 5px;"></i><br>
+        BackEnd:-NodeJs<i class="fa-brands fa-node-js" style="margin-left: 5px; margin-right: 5px;"></i> <br>
+        DataBase:- MySQL <i class="fa-solid fa-database" style="margin-left: 5px; margin-right: 5px;"></i>
+      </center>
+    </div>
+  </div>
+  </body>
+</html>

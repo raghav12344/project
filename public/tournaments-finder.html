@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>players_tournaments</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <style>
+      #icon:hover{
+      cursor: pointer;
+      background-color: lightgray;
+      }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script>
+        let arr=[];
+        let parts=[];
+        let module=angular.module("module",[]);
+        let controller=module.controller("controller",function($scope,$http){
+            $scope.text="Click To Search";
+            $scope.selcity="none";
+            $scope.selsport="none";
+            
+            $scope.fetchCities=function()
+            {
+              let url="/fetch-cities";
+            $http.get(url).then(done,fail)
+            function done(response2)
+            {
+                // alert(JSON.stringify(response2.data));
+                $scope.citiesArray=response2.data;
+                
+            }
+            function fail(err)
+            {
+                alert(err.data);
+            }
+            }
+            $scope.fetchSports=function()
+            {
+              url2="/fetch-sports";
+                $http.get(url2).then(done,fail)
+                function done(response1)
+                {
+                    // alert(JSON.stringify(response1.data));
+                    $scope.sportsArray=response1.data;
+                }
+                function fail(err)
+                {
+                    alert(err.data);
+                }
+            }
+            
+
+            $scope.dosearchshow=function()
+            {
+                //alert($scope.selcity);
+                // alert($scope.selsport);
+                let url="/search-tournaments?city="+$scope.selcity+"&game="+ $scope.selsport;//QUery String
+                $http.get(url).then(done,fail);
+                function done(response)
+                {
+                    // alert(JSON.stringify(response.data));
+                    $scope.jsonArray=response.data;
+                }
+                function fail(err)
+                {
+                    alert(err.data);
+                }
+            }
+            $scope.doFetchOne=function(index)
+            {
+                $scope.selObj=$scope.jsonArray[index];
+                // alert(JSON.stringify($scope.selObj));
+            }
+            })
+
+    </script>
+</head>
+  <body ng-app="module" ng-controller="controller" ng-init="fetchCities();fetchSports();">
+    
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar bg-body-tertiary">
+                <div class="container-fluid">
+                  <a class="navbar-brand" href="#">
+                    <img src="pics/logo.jpg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                    Find Tournaments
+                  </a>
+                </div>
+              </nav>
+        </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active" data-bs-interval="3000">
+                <img src="pics/tournament finder pic1.jpg" class="d-block w-100" alt="..." style="height: 650px;">
+              </div>
+              <div class="carousel-item" data-bs-interval="3000">
+                <img src="pics/tournament finder pic2.jpg" class="d-block w-100" alt="..." style="height: 650px;">
+              </div>
+              <div class="carousel-item" data-bs-interval="3000">
+                <img src="pics/tournament finder pic 3.jpg" class="d-block w-100" alt="..." style="height: 650px;">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+    <div class="row" >
+        <div class="col-md-6">
+            <label for="">Cities</label>
+            <div>
+                <select class="form-select" aria-label="Default select example" ng-model="selcity" id="listcity" >
+                    <option selected>Available Cities</option>
+                    <option ng-repeat="boxObj in citiesArray" value="{{boxObj.city}}">{{boxObj.city}}</option>
+                  </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="">Sports</label>
+            <div>
+                <select class="form-select" aria-label="Default select example" ng-model="selsport" id="listsport">
+                    <option value="none" selected>Availabe Sports</option>
+                    <option ng-repeat="boxObj1 in sportsArray" value="{{boxObj1.game}}">{{boxObj1.game}}</option>
+
+                  </select>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 30px;">
+    <div class="row">
+        <div class="col-md-12">
+            <center><button type="button" class="btn btn-primary btn-lg" id="searchbtn" ng-click="dosearchshow()">Search</button></center>
+        </div>
+    </div>
+</div>
+    <div style="margin-top: 8px;">
+        <center>
+            <label for="">{{text}}</label>
+        </center>
+    </div>
+    <div class="container" style="margin-top: 200px;">
+    <div class="row">
+        <div class="col-md-4" ng-repeat="search_obj in jsonArray">
+        <div class="card" >
+            <img src="{{search_obj.posterpic}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{search_obj.title}}</h5>
+              <p class="card-text">{{search_obj.dot.split("T")[0]}}</p>
+              <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal1" ng-click="doFetchOne($index);">Click For More Info</a>
+            </div>
+          </div></div>
+    </div>
+</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">{{selObj.title}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          <img src="{{selObj.posterpic}}" alt="">
+        </p>
+        <p>
+        <b>Game:</b>{{selObj.game}}
+        </p>
+        <p>
+        <b>Date:</b>{{selObj.dot.split("T")[0]}}
+        </p>
+        <p>
+        <b>Venue:</b>{{selObj.location}}
+        </p>
+        <p>
+        <b>City:</b>{{selObj.city}}
+        </p>
+        <p>
+        <b>Zip:</b>{{selObj.zip}}
+        </p>
+        <p>
+        <b>State:</b>{{selObj.state}}
+        </p>
+        <p>
+        <b>Entry Fee:</b>{{selObj.fee}}
+        </p>
+        <p>
+        <b>Prizes:</b>{{selObj.prizes}}
+        </p>
+        <p>
+        <b>Contact No:-</b>{{selObj.mobile}}
+        </p>
+        <p>
+        <b>Other Info:</b>{{selObj.info}}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="font-size: large; margin-left: 50px;">
+  Follow Ludus <a style="color: black;" href=""><i class="fa-brands fa-facebook-f" style="margin-left: 20px;" id="icon"></i></a> <a style="color: black;" href=""><i class="fa-brands fa-x-twitter" id="icon" style="margin-left: 20px;" href=""></i></a>  <a style="color: black;" href="https://www.instagram.com/ludus.sport.official/" target="_blank"><i class="fa-brands fa-instagram" id="icon" style="margin-left: 20px;"></i></a>
+</div>
+  <div class="row" style="background-color: lightgray; margin-top: 0px; ">
+    <hr>
+    <div class="container">
+      <center>
+        This project Is Developed To Help People Around The Globol and Spread Awareness About Upcoming Sports Events... <br>
+        Developed In Intrest Of Public Wellfare... <i class="fa-solid fa-hand-holding-heart" style="margin-left: 5px; margin-right: 5px;"></i><br>
+        Launched In 2024
+        <div>Copy Right Reserved<i class="fa-solid fa-copyright" style="margin-left: 5px;"></i> Since 2024</div>
+        Technologies Used For development: <br>
+        FrontEnd:-HTML<i class="fa-brands fa-html5" style="margin-left: 5px; margin-right: 5px;"></i>/CSS<i class="fa-brands fa-css3-alt" style="margin-left: 5px; margin-right: 5px;"></i>/JavaScript<i class="fa-brands fa-js" style="margin-left: 5px; margin-right: 5px;"></i>/AngularJS<i class="fa-brands fa-angular" style="margin-left: 5px; margin-right: 5px;"></i>/JQuery/Bootstrap<i class="fa-brands fa-bootstrap " style="margin-left: 5px; margin-right: 5px;"></i><br>
+        BackEnd:-NodeJs<i class="fa-brands fa-node-js" style="margin-left: 5px; margin-right: 5px;"></i> <br>
+        DataBase:- MySQL <i class="fa-solid fa-database" style="margin-left: 5px; margin-right: 5px;"></i>
+      </center>
+    </div>
+  </div>
+</body>
+</html>

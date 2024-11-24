@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> player dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <style>
+      #cardHover{
+        transition: ease all 1s;
+      }
+      #cardHover:hover{
+        box-shadow: 1px 1px 1px 1px ;
+        cursor: pointer;
+        transform: scale(1.1);
+        transition: ease all 1s;
+      }
+      #icon:hover{
+        cursor: pointer;
+        background-color: lightgray;
+      }
+  </style><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+      
+      $(document).ready(function(){
+        $("#htmlemail").html(localStorage.getItem("activeUser"));
+      $("#btnSettings").click(function(){
+        $("#txtemail").val(localStorage.getItem("activeUser")).attr("readonly",true);
+      })
+      $("#btnSave").click(function(){
+        if($("#txtnew").val()==$("#txtcon").val())
+        {
+          let email=$("#txtemail").val();
+          let curr=$("#txtcurr").val();
+          let newpass=$("#txtnew").val();
+          let obj={
+            type:"get",
+            url:"/change-settings",
+            data:{
+              txtemail:email,
+              txtcurr:curr,
+              txtnew:newpass
+            }
+          }
+          $.ajax(obj).done(function(response){
+            alert(response);
+          }).fail(function(err){
+            alert("Server error please try again");
+          })
+        }
+        else
+        {
+          alert("new and Confirm Passward donot match");
+        }
+      })
+        $("#btnlogout").click(function(){
+        if(confirm("Do you wanna logout"))
+        {
+          localStorage.removeItem("activeUser");
+          history.pushState(null,"","index.html");
+          location.href="index.html";
+        }
+      })
+
+      })
+    </script>
+  </head>
+  <body>
+    <form action="">
+    <div class="row">
+      <div class="col-md-12">
+        <nav class="navbar bg-dark">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#"><font style="color: white; font-family: comic sans ms;"><b>WELCOME:</b><span id="htmlemail"></span></font></a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <center><h2><font style="font-family: Arial, Helvetica, sans-serif;">Dashboard</font></h2></center>
+      </div>
+    </div>
+    <br><br><br>
+    <div class="row">
+        <div class="col-md-3">
+            <center>
+            <div class="card" style="width: 18rem;" id="cardHover">
+                <img src="pics/profile.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Profile</h5>
+                  <p class="card-text">You can add your details</p>
+                  <input type="submit" class="btn btn-primary" formaction="/profileplayer" value="click to continue">
+                </div>
+              </div>
+            </center>
+        </div>
+        <div class="col-md-3">
+            <center>
+            <div class="card" style="width: 18rem;" id="cardHover">
+                <img src="pics/tournaments.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Tournaments</h5>
+                  <p class="card-text">Players find opportunity</p>
+                  <button formaction="/find-tournament" type="submit" class="btn btn-primary">click to find</button>
+                </div>
+              </div>
+            </center>
+        </div>
+        <div class="col-md-3">
+            <center>
+            <div class="card" style="width: 18rem;" id="cardHover">
+                <img src="pics/settingsicon.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Settings</h5>
+                  <p class="card-text">Change password etc...</p>
+                  <button type="button" class="btn btn-primary" id="btnSettings" data-bs-toggle="modal" data-bs-target="#settingsModal">Settings</button>
+                </div>
+              </div>
+            </center>
+        </div>
+        <div class="col-md-3">
+            <center>
+            <div class="card" style="width: 18rem;" id="cardHover">
+                <img src="pics/logouticon.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Quick Actions</h5>
+                  <p class="card-text">Remember logout before going...</p>
+                  <a href="#" class="btn btn-primary" id="btnlogout">LogOut</a>
+                </div>
+              </div>
+        </div>
+        </center>
+    </div>
+    <!-- Modal -->
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Settings</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="exampleFormControlInput1" class="form-label">Email Address</label>
+        <input type="email" class="form-control" id="txtemail" placeholder="name@example.com">
+        <label for="exampleFormControlInput1" class="form-label">Current Password</label>
+      <input type="password" class="form-control" id="txtcurr">
+      <label for="exampleFormControlInput1" class="form-label">New Password</label>
+      <input type="password" class="form-control" id="txtnew">
+      <label for="exampleFormControlInput1" class="form-label">Re-enter New Password</label>
+      <input type="password" class="form-control" id="txtcon">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="btnSave">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+  </form>
+  <div style="font-size: large; margin-left: 50px;">
+    Follow Ludus <a style="color: black;" href=""><i class="fa-brands fa-facebook-f" style="margin-left: 20px;" id="icon"></i></a> <a style="color: black;" href=""><i class="fa-brands fa-x-twitter" id="icon" style="margin-left: 20px;" href=""></i></a>  <a style="color: black;" href="https://www.instagram.com/ludus.sport.official/" target="_blank"><i class="fa-brands fa-instagram" id="icon" style="margin-left: 20px;"></i></a>
+  </div>
+    <div class="row" style="background-color: lightgray; margin-top: 0px;">
+      <hr>
+      <div class="container">
+        <center>
+          This project Is Developed To Help People Around The Globol and Spread Awareness About Upcoming Sports Events... <br>
+          Developed In Intrest Of Public Wellfare... <i class="fa-solid fa-hand-holding-heart" style="margin-left: 5px; margin-right: 5px;"></i><br>
+          Launched In 2024
+          <div>Copy Right Reserved<i class="fa-solid fa-copyright" style="margin-left: 5px;"></i> Since 2024</div>
+          Technologies Used For development: <br>
+          FrontEnd:-HTML<i class="fa-brands fa-html5" style="margin-left: 5px; margin-right: 5px;"></i>/CSS<i class="fa-brands fa-css3-alt" style="margin-left: 5px; margin-right: 5px;"></i>/JavaScript<i class="fa-brands fa-js" style="margin-left: 5px; margin-right: 5px;"></i>/AngularJS<i class="fa-brands fa-angular" style="margin-left: 5px; margin-right: 5px;"></i>/JQuery/Bootstrap<i class="fa-brands fa-bootstrap " style="margin-left: 5px; margin-right: 5px;"></i><br>
+          BackEnd:-NodeJs<i class="fa-brands fa-node-js" style="margin-left: 5px; margin-right: 5px;"></i> <br>
+          DataBase:- MySQL <i class="fa-solid fa-database" style="margin-left: 5px; margin-right: 5px;"></i>
+        </center>
+      </div>
+    </div>
+  </body>
+</html>
