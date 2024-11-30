@@ -5,6 +5,14 @@ let config="mysql://avnadmin:AVNS_AdrypzLPwFLOySPl7dA@mysql-1e633ea7-raghav1233-
 let db=mysql.createConnection(config);
 let fileuploader=require("express-fileupload");
 var cloudinary=require("cloudinary").v2;
+let nodemailer=require("nodemailer");
+var transporter=nodemailer.createTransport({
+    service:"gmail",
+    auth:{
+        user:"ludus.offiicial2024@gmail.com",
+        pass:"Raghav@2006"
+    }
+});
 cloudinary.config({
     cloud_name: 'drsm7bvgf', 
     api_key: '441925695211367', 
@@ -33,7 +41,20 @@ app.get("/signup",function(req,resp){
 
     db.query("insert into users(emailid,pwd,utype,status,dos) values(?,?,?,?,current_date())",[email,pwd,utype,1],function(err){
         if(err==null)
-           resp.send("Signed up Successfully.Please Login To Continue");
+        {   resp.send("Signed up Successfully.Please Login To Continue");
+            var mailoptions={
+                from:"ludus.official2024@gmail.com",
+                to:email,
+                subject:"Welcome To The Community",
+                text:"Thanks for registering on ludus.Hope you will make the environment healthy and good for players"
+            }
+            transporter.sendMail(mailoptions,function(error,info){
+                if(error==null)
+                    resp.send("Please Login to continue");
+                else
+                    console.log(error.message);
+            })
+        }
         else
             resp.send(err.message)
     })
