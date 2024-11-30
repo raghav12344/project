@@ -7,10 +7,10 @@ let fileuploader=require("express-fileupload");
 var cloudinary=require("cloudinary").v2;
 let nodemailer=require("nodemailer");
 var transporter=nodemailer.createTransport({
-    service:"gmail",
+    service:'gmail',
     auth:{
-        user:"ludus.offiicial2024@gmail.com",
-        pass:"bvdtqqdspaoyyvia"
+        user:'ludus.offiicial2024@gmail.com',
+        pass:'bvdtqqdspaoyyvia'
     }
 });
 cloudinary.config({
@@ -43,9 +43,9 @@ app.get("/signup",function(req,resp){
         if(err==null)
         {   resp.send("Signed up Successfully.Please Login To Continue");
             var mailoptions={
-                from:"ludus.official2024@gmail.com",
+                from:'ludus.official2024@gmail.com',
                 to:email,
-                subject:"Welcome To The Community",
+                subject:'Welcome To The Community',
                 text:"Thanks for registering on ludus.Hope you will make the environment healthy and good for players"
             }
             transporter.sendMail(mailoptions,function(error,info){
