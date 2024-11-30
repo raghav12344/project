@@ -10,7 +10,7 @@ var transporter=nodemailer.createTransport({
     service:"gmail",
     auth:{
         user:"ludus.offiicial2024@gmail.com",
-        pass:"Raghav@2006"
+        pass:"bvdtqqdspaoyyvia"
     }
 });
 cloudinary.config({
@@ -50,7 +50,10 @@ app.get("/signup",function(req,resp){
             }
             transporter.sendMail(mailoptions,function(error,info){
                 if(error==null)
+                {
                     resp.send("Please Login to continue");
+                    console.log(info.response);
+                }    
                 else
                     console.log(error.message);
             })
