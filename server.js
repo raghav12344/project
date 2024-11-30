@@ -1,18 +1,16 @@
 var express=require("express");
 var app=express();
-var bodyparser=require("body_parser");
 var mysql=require("mysql2");
 let config="mysql://avnadmin:AVNS_AdrypzLPwFLOySPl7dA@mysql-1e633ea7-raghav1233-61dd.k.aivencloud.com:28277/defaultdb?";
 let db=mysql.createConnection(config);
 let fileuploader=require("express-fileupload");
 var cloudinary=require("cloudinary").v2;
 let nodemailer=require("nodemailer");
-app.use(bodyparser.urlencoded({extended:true}));
 var transporter=nodemailer.createTransport({
     service:'gmail',
     auth:{
         user:'ludus.official2024@gmail.com',
-        pass:'bvdtqqdspaoyyvia'
+        pass:'wrzi byei tvag nsyr'
     }
 });
 cloudinary.config({
